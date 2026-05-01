@@ -82,6 +82,92 @@ function fmtDay(dateStr, idx) {
   return d.toLocaleDateString([], { weekday: 'short' }).toUpperCase();
 }
 
+// Check if it's day or night based on sunrise/sunset
+function isDayTime(sunriseISO, sunsetISO) {
+  const now = new Date();
+  const sunrise = new Date(sunriseISO);
+  const sunset = new Date(sunsetISO);
+  return now >= sunrise && now < sunset;
+}
+
+// Set dynamic background color based on weather and time
+function setDynamicBackground(weatherCode, isDay) {
+  const root = document.documentElement;
+  let bgColor, bgGradient, accentColor;
+  
+  if (isDay) {
+    // Day time colors
+    if (weatherCode === 0 || weatherCode === 1) {
+      // Clear sky - bright, warm golden
+      bgColor = '#0d5a7a';
+      bgGradient = 'linear-gradient(135deg, #1a90c4 0%, #ffd084 100%)';
+      accentColor = '#ffb340';
+    } else if (weatherCode === 2 || weatherCode === 3) {
+      // Partly cloudy / Overcast - muted blue
+      bgColor = '#1a3a5e';
+      bgGradient = 'linear-gradient(135deg, #1e4d7b 0%, #5a7c9f 100%)';
+      accentColor = '#7ba3c0';
+    } else if (weatherCode === 45 || weatherCode === 48) {
+      // Fog - gray/blue
+      bgColor = '#2a3d52';
+      bgGradient = 'linear-gradient(135deg, #3a4f66 0%, #556b82 100%)';
+      accentColor = '#7a8fa5';
+    } else if ((weatherCode >= 51 && weatherCode <= 67) || (weatherCode >= 80 && weatherCode <= 82)) {
+      // Rain - stormy blue-purple
+      bgColor = '#1a2a4a';
+      bgGradient = 'linear-gradient(135deg, #2c3e5f 0%, #5a4a8f 100%)';
+      accentColor = '#9b7bff';
+    } else if (weatherCode >= 71 && weatherCode <= 86) {
+      // Snow - cool white-blue
+      bgColor = '#2a3e5a';
+      bgGradient = 'linear-gradient(135deg, #4a6a8a 0%, #b0d4f0 100%)';
+      accentColor = '#b0d4f0';
+    } else {
+      // Thunderstorm - dark purple
+      bgColor = '#1a1f3a';
+      bgGradient = 'linear-gradient(135deg, #2d1b4e 0%, #4a2a6f 100%)';
+      accentColor = '#b366ff';
+    }
+  } else {
+    // Night time colors
+    if (weatherCode === 0 || weatherCode === 1) {
+      // Clear night - deep blue with stars feel
+      bgColor = '#050a1a';
+      bgGradient = 'linear-gradient(135deg, #0f1a3a 0%, #1a2a4a 100%)';
+      accentColor = '#4aeadc';
+    } else if (weatherCode === 2 || weatherCode === 3) {
+      // Cloudy night - dark gray-blue
+      bgColor = '#0a0f1a';
+      bgGradient = 'linear-gradient(135deg, #1a1f2a 0%, #2a3a4a 100%)';
+      accentColor = '#7a9fb0';
+    } else if (weatherCode === 45 || weatherCode === 48) {
+      // Foggy night - muted dark
+      bgColor = '#0f1220';
+      bgGradient = 'linear-gradient(135deg, #1a1f30 0%, #2a3040 100%)';
+      accentColor = '#6a8095';
+    } else if ((weatherCode >= 51 && weatherCode <= 67) || (weatherCode >= 80 && weatherCode <= 82)) {
+      // Rainy night - dark blue-gray
+      bgColor = '#0a0f1a';
+      bgGradient = 'linear-gradient(135deg, #1a1f35 0%, #2a2a45 100%)';
+      accentColor = '#8b7bde';
+    } else if (weatherCode >= 71 && weatherCode <= 86) {
+      // Snowy night - cool dark blue
+      bgColor = '#0f1a2a';
+      bgGradient = 'linear-gradient(135deg, #1a2a3a 0%, #2a3a5a 100%)';
+      accentColor = '#7ab0d4';
+    } else {
+      // Thunderstorm night - very dark purple
+      bgColor = '#050810';
+      bgGradient = 'linear-gradient(135deg, #0f0a1a 0%, #1a0f2a 100%)';
+      accentColor = '#9b66ff';
+    }
+  }
+  
+  // Apply to body
+  document.body.style.background = bgGradient;
+  root.style.setProperty('--bg', bgColor);
+}
+
 // ── DOM references ──────────────────────────────────────────
 const searchInput  = document.getElementById('searchInput');
 const suggestions  = document.getElementById('suggestions');
@@ -208,10 +294,18 @@ function renderWeather(data, cityName, country) {
   document.getElementById('sunrise').textContent = fmtTime(d.sunrise[0]);
   document.getElementById('sunset').textContent  = fmtTime(d.sunset[0]);
 
+  // Determine if day or night
+  const isDay = isDayTime(d.sunrise[0], d.sunset[0]);
+  
+  // Set dynamic background
+  setDynamicBackground(c.weathercode, isDay);
+
   // Bg glow color based on condition
   const bgGlow = document.getElementById('bgGlow');
   if (c.weathercode === 0 || c.weathercode === 1) {
-    bgGlow.style.background = 'radial-gradient(circle, rgba(255,180,60,0.05) 0%, transparent 70%)';
+    bgGlow.style.background = isDay 
+      ? 'radial-gradient(circle, rgba(255,180,60,0.08) 0%, transparent 70%)'
+      : 'radial-gradient(circle, rgba(74,234,220,0.04) 0%, transparent 70%)';
   } else if (c.weathercode >= 61 && c.weathercode <= 82) {
     bgGlow.style.background = 'radial-gradient(circle, rgba(123,97,255,0.06) 0%, transparent 70%)';
   } else {
