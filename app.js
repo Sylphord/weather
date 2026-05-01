@@ -376,6 +376,37 @@ locateBtn.addEventListener('click', () => {
   );
 });
 
+// Auto-locate on page load
+async function autoLocate() {
+  if (!navigator.geolocation) {
+    showEmpty();
+    return;
+  }
+  showLoading();
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      const { latitude: lat, longitude: lon } = pos.coords;
+      try {
+        const res  = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,
+          { headers: { 'Accept-Language': 'en' } }
+        );
+        const geo  = await res.json();
+        const city = geo.address?.city || geo.address?.town || geo.address?.village || 'Your Location';
+        const country = geo.address?.country || '';
+        loadWeather(lat, lon, city, country);
+      } catch (_) {
+        loadWeather(lat, lon, 'Your Location', '');
+      }
+    },
+    (err) => {
+      // If location access denied or timeout, show empty state
+      showEmpty();
+    },
+    { timeout: 8000 }
+  );
+}
+
 // ── Retry ────────────────────────────────────────────────────
 retryBtn.addEventListener('click', () => {
   if (lastLatLon) {
@@ -387,4 +418,4 @@ retryBtn.addEventListener('click', () => {
 });
 
 // ── Init ─────────────────────────────────────────────────────
-showEmpty();
+autoLocate();
