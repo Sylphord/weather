@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATMOS — Weather Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Background effects -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow" id="bgGlow"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <span class="logo-mark">◈</span>
+      <span class="logo-text">ATMOS</span>
+    </div>
+    <div class="header-status" id="headerStatus">
+      <span class="status-dot"></span>
+      <span class="status-text">LIVE</span>
+    </div>
+  </header>
+
+  <!-- Search -->
+  <section class="search-section">
+    <div class="search-wrapper">
+      <div class="search-bar">
+        <span class="search-icon">⌕</span>
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Search city or coordinates..."
+          autocomplete="off"
+        />
+        <button class="locate-btn" id="locateBtn" title="Use my location">◎</button>
+      </div>
+      <ul class="search-suggestions" id="suggestions"></ul>
+    </div>
+  </section>
+
+  <!-- Main content -->
+  <main class="main" id="mainContent">
+
+    <!-- Loading state -->
+    <div class="loading-state" id="loadingState">
+      <div class="loader-ring"></div>
+      <p class="loader-text">ACQUIRING SIGNAL<span class="blink-dots">...</span></p>
+    </div>
+
+    <!-- Error state -->
+    <div class="error-state hidden" id="errorState">
+      <span class="error-icon">⚠</span>
+      <p class="error-msg" id="errorMsg">Could not retrieve weather data.</p>
+      <button class="retry-btn" id="retryBtn">RETRY</button>
+    </div>
+
+    <!-- Weather dashboard -->
+    <div class="dashboard hidden" id="dashboard">
+
+      <!-- Current weather hero -->
+      <section class="hero-card">
+        <div class="hero-left">
+          <div class="location-info">
+            <h1 class="city-name" id="cityName">—</h1>
+            <p class="country-name" id="countryName">—</p>
+            <p class="update-time" id="updateTime">—</p>
+          </div>
+          <div class="condition-block">
+            <span class="weather-icon" id="weatherIcon">—</span>
+            <span class="condition-label" id="conditionLabel">—</span>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="temp-display">
+            <span class="temp-value" id="tempValue">—</span>
+            <span class="temp-unit">°C</span>
+          </div>
+          <div class="feels-like">feels like <span id="feelsLike">—</span>°</div>
+        </div>
+      </section>
+
+      <!-- Stats grid -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-label">HUMIDITY</span>
+          <span class="stat-value" id="humidity">—</span>
+          <span class="stat-unit">%</span>
+          <div class="stat-bar"><div class="stat-fill" id="humidityBar"></div></div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">WIND</span>
+          <span class="stat-value" id="windSpeed">—</span>
+          <span class="stat-unit">km/h</span>
+          <div class="wind-dir" id="windDir">↑</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">UV INDEX</span>
+          <span class="stat-value" id="uvIndex">—</span>
+          <span class="stat-unit" id="uvLabel">—</span>
+          <div class="stat-bar"><div class="stat-fill uv-fill" id="uvBar"></div></div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">PRECIP. CHANCE</span>
+          <span class="stat-value" id="precipProb">—</span>
+          <span class="stat-unit">%</span>
+          <div class="stat-bar"><div class="stat-fill precip-fill" id="precipBar"></div></div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">SUNRISE</span>
+          <span class="stat-value sunrise-val" id="sunrise">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">SUNSET</span>
+          <span class="stat-value sunset-val" id="sunset">—</span>
+        </div>
+      </section>
+
+      <!-- Hourly forecast -->
+      <section class="forecast-section">
+        <h2 class="section-title"><span class="title-accent">◂</span> 24-HOUR FORECAST</h2>
+        <div class="hourly-scroll" id="hourlyScroll">
+          <!-- filled by JS -->
+        </div>
+      </section>
+
+      <!-- 7-day forecast -->
+      <section class="forecast-section">
+        <h2 class="section-title"><span class="title-accent">◂</span> 7-DAY OUTLOOK</h2>
+        <div class="daily-grid" id="dailyGrid">
+          <!-- filled by JS -->
+        </div>
+      </section>
+
+    </div><!-- /dashboard -->
+
+    <!-- Empty state (initial) -->
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">⛅</div>
+      <p class="empty-title">Search a city to begin</p>
+      <p class="empty-sub">or allow location access for instant results</p>
+    </div>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
