@@ -1,29 +1,29 @@
 /* =============================================
    ATMOS — Weather Intelligence
-   Dark radar/terminal aesthetic
+   Starry sky dark blue aesthetic
    ============================================= */
 
 :root {
-  --bg:          #060810;
-  --bg-2:        #0c0f1a;
-  --bg-3:        #111524;
-  --surface:     #141828;
-  --surface-2:   #1a1f33;
-  --border:      rgba(74, 234, 220, 0.12);
-  --border-hover:rgba(74, 234, 220, 0.3);
+  --bg:          #020816;
+  --bg-2:        #04122c;
+  --bg-3:        #0a1b39;
+  --surface:     #0f203f;
+  --surface-2:   #122a52;
+  --border:      rgba(122, 167, 255, 0.16);
+  --border-hover:rgba(122, 167, 255, 0.26);
 
-  --cyan:        #4aeadc;
-  --cyan-dim:    rgba(74, 234, 220, 0.15);
-  --cyan-glow:   rgba(74, 234, 220, 0.08);
-  --violet:      #7b61ff;
-  --violet-dim:  rgba(123, 97, 255, 0.15);
-  --amber:       #ffb340;
-  --red:         #ff4f6a;
-  --green:       #3dffa0;
+  --cyan:        #7aa7ff;
+  --cyan-dim:    rgba(122, 167, 255, 0.16);
+  --cyan-glow:   rgba(122, 167, 255, 0.08);
+  --violet:      #7aa7ff;
+  --violet-dim:  rgba(122, 167, 255, 0.12);
+  --amber:       #7aa7ff;
+  --red:         #7aa7ff;
+  --green:       #7aa7ff;
 
-  --text-1:      #e8eeff;
-  --text-2:      #8892b0;
-  --text-3:      #4a5278;
+  --text-1:      #e9f2ff;
+  --text-2:      #a3b2d6;
+  --text-3:      #7892c1;
 
   --font-mono:   'Space Mono', monospace;
   --font-ui:     'Outfit', sans-serif;
@@ -32,14 +32,14 @@
   --radius-md:   12px;
   --radius-lg:   20px;
 
-  --transition:  0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition:  0.15s ease;
 }
 
 /* ---- Reset ---- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  background: var(--bg);
+  background: linear-gradient(180deg, #04112a 0%, #020815 80%);
   color: var(--text-1);
   font-family: var(--font-ui);
   min-height: 100vh;
@@ -52,21 +52,24 @@ body {
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(rgba(74,234,220,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(74,234,220,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
+    radial-gradient(circle, rgba(255,255,255,0.18) 1px, transparent 0),
+    radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 0),
+    linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.25) 100%);
+  background-size: 180px 180px, 120px 120px, cover;
+  background-position: 0 10px, 40px 120px, center;
+  background-repeat: repeat;
   pointer-events: none;
   z-index: 0;
 }
 
 .bg-glow {
   position: fixed;
-  width: 600px;
-  height: 600px;
+  width: 420px;
+  height: 420px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(74,234,220,0.04) 0%, transparent 70%);
-  top: -200px;
-  right: -200px;
+  background: radial-gradient(circle, rgba(122,167,255,0.08) 0%, transparent 60%);
+  top: -140px;
+  right: -120px;
   pointer-events: none;
   z-index: 0;
   transition: all 1.5s ease;
@@ -113,8 +116,8 @@ body {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 8px var(--green);
+  background: var(--cyan);
+  box-shadow: none;
   animation: pulse-dot 2s infinite;
 }
 
@@ -127,7 +130,7 @@ body {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.2em;
-  color: var(--green);
+  color: var(--cyan);
 }
 
 /* ---- Search ---- */
@@ -156,11 +159,11 @@ body {
 
 .search-bar:focus-within {
   border-color: var(--cyan);
-  box-shadow: 0 0 0 3px var(--cyan-dim), 0 0 30px var(--cyan-glow);
+  box-shadow: 0 0 0 2px rgba(122,167,255,0.1);
 }
 
 .search-icon {
-  font-size: 20px;
+  font-size: 18px;
   color: var(--text-3);
   flex-shrink: 0;
 }
@@ -171,7 +174,7 @@ body {
   border: none;
   outline: none;
   font-family: var(--font-ui);
-  font-size: 16px;
+  font-size: 15px;
   color: var(--text-1);
 }
 
@@ -189,14 +192,13 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all var(--transition);
+  transition: background var(--transition), border-color var(--transition);
   flex-shrink: 0;
 }
 
 .locate-btn:hover {
-  background: var(--cyan-dim);
+  background: rgba(122,167,255,0.1);
   border-color: var(--cyan);
-  box-shadow: 0 0 12px var(--cyan-dim);
 }
 
 /* ---- Suggestions ---- */
@@ -294,7 +296,7 @@ body {
 
 .error-icon {
   font-size: 36px;
-  color: var(--red);
+  color: var(--cyan);
 }
 
 .error-msg {
@@ -307,17 +309,16 @@ body {
   font-size: 12px;
   letter-spacing: 0.2em;
   color: var(--cyan);
-  background: var(--cyan-dim);
-  border: 1px solid var(--border-hover);
+  background: rgba(122,167,255,0.12);
+  border: 1px solid rgba(122,167,255,0.24);
   border-radius: var(--radius-sm);
   padding: 10px 24px;
   cursor: pointer;
-  transition: all var(--transition);
+  transition: background var(--transition), border-color var(--transition);
 }
 
 .retry-btn:hover {
-  background: rgba(74,234,220,0.25);
-  box-shadow: 0 0 16px var(--cyan-dim);
+  background: rgba(122,167,255,0.18);
 }
 
 .empty-state {
@@ -364,31 +365,17 @@ body {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 36px;
+  padding: 32px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 24px;
+  gap: 20px;
   position: relative;
-  overflow: hidden;
 }
 
-.hero-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--cyan), var(--violet), transparent);
-}
-
+.hero-card::before,
 .hero-card::after {
-  content: '';
-  position: absolute;
-  top: -40px; right: -40px;
-  width: 200px; height: 200px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(74,234,220,0.06) 0%, transparent 70%);
-  pointer-events: none;
+  display: none;
 }
 
 .location-info {
@@ -429,7 +416,6 @@ body {
 .weather-icon {
   font-size: 40px;
   line-height: 1;
-  filter: drop-shadow(0 0 12px rgba(255,255,255,0.1));
 }
 
 .condition-label {
@@ -504,6 +490,13 @@ body {
   font-size: 10px;
   letter-spacing: 0.2em;
   color: var(--text-3);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-icon {
+  font-size: 12px;
 }
 
 .stat-value {

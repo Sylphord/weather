@@ -213,6 +213,27 @@ function showEmpty() {
   dashboard.classList.add('hidden');
 }
 
+const LAST_LOCATION_KEY = 'atmosLastLocation';
+
+function saveLastLocation(location) {
+  try {
+    localStorage.setItem(LAST_LOCATION_KEY, JSON.stringify(location));
+  } catch (err) {
+    console.warn('Could not save last location', err);
+  }
+}
+
+function loadLastLocation() {
+  try {
+    const item = localStorage.getItem(LAST_LOCATION_KEY);
+    if (!item) return null;
+    return JSON.parse(item);
+  } catch (err) {
+    console.warn('Could not load last location', err);
+    return null;
+  }
+}
+
 // Animate a bar fill
 function animateBar(el, pct) {
   setTimeout(() => { el.style.width = Math.min(100, pct) + '%'; }, 50);
@@ -364,6 +385,7 @@ function renderWeather(data, cityName, country) {
     dailyGrid.appendChild(row);
   }
 
+  saveLastLocation({ lat, lon, city, country });
   showDashboard();
 }
 
@@ -512,4 +534,10 @@ retryBtn.addEventListener('click', () => {
 });
 
 // ── Init ─────────────────────────────────────────────────────
-autoLocate();
+const savedLocation = loadLastLocation();
+if (savedLocation?.lat && savedLocation?.lon) {
+  searchInput.value = savedLocation.city || '';
+  loadWeather(savedLocation.lat, savedLocation.lon, savedLocation.city, savedLocation.country);
+} else {
+  autoLocate();
+}
