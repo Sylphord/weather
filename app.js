@@ -385,7 +385,6 @@ function renderWeather(data, cityName, country) {
     dailyGrid.appendChild(row);
   }
 
-  saveLastLocation({ lat, lon, city, country });
   showDashboard();
 }
 
@@ -395,6 +394,7 @@ async function loadWeather(lat, lon, city, country) {
   lastLatLon = { lat, lon, city, country };
   try {
     const data = await fetchWeather(lat, lon);
+    saveLastLocation({ lat, lon, city, country });
     renderWeather(data, city, country);
   } catch (err) {
     showError('Failed to load weather data. Check your connection.');
